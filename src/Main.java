@@ -163,7 +163,6 @@ public class Main {
                 if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
                 {
                     target = chooser.getSelectedFile().toPath();
-
                     inFile = new Scanner(target);
 
                     while(inFile.hasNextLine())
@@ -198,45 +197,7 @@ public class Main {
     public static void clearList() {
         arrList.clear();
     }
-    //JFileChooser chooser = new JFileChooser();
-    //        Scanner inFile;
-    //        Path target = new File(System.getProperty("user.dir")).toPath();
-    //        target = target.resolve("src");
-    //        chooser.setCurrentDirectory(target.toFile());
-    //
-    //        try {
-    //
-    //
-    //            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-    //            {
-    //                target = chooser.getSelectedFile().toPath();
-    //                inFile = new Scanner(target);
-    //
-    //                while(inFile.hasNextLine())
-    //                {
-    //
-    //
-    //                }
-    //
-    //                System.out.println("File " + target.getFileName() + " successfully read!");
-    //                inFile.close();
-    //
-    //            } else
-    //            {
-    //                System.out.println("You did not select a file, process terminating");
-    //                System.exit(0);
-    //            }
-    //        }
-    //        catch (FileNotFoundException e)
-    //        {
-    //            System.out.println("File Not Found Error");
-    //            e.printStackTrace();
-    //        }
-    //        catch (IOException e)
-    //        {
-    //            System.out.println("IOException Error");
-    //            e.printStackTrace();
-    //        }
+
 
 
 }
