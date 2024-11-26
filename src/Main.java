@@ -194,7 +194,7 @@ public class Main {
         }
 
 
-    public static void clearList() {
+    public static void clearList(){
         arrList.clear();
     }
 
