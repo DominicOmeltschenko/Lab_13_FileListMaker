@@ -5,6 +5,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import static java.nio.file.StandardOpenOption.CREATE;
 public class Main {
     static ArrayList<String> arrList = new ArrayList<>();
     static Scanner pipe = new Scanner(System.in);
@@ -97,6 +98,38 @@ public class Main {
     }
     public static void saveFile() {
 
+        Scanner pipe = new Scanner(System.in);
+        ArrayList<String> recs = new ArrayList<>();
+        String fileName = "";
+        for (int i = 0; i < arrList.size(); i++) {
+            recs.add((i + 1) + ". " + arrList.get(i));
+        }
+
+        fileName = SafeInput.getNonZeroLenString(pipe, "What would you like to name your file");
+
+        File workingDirectory = new File(System.getProperty("user.dir"));
+        Path file = Paths.get(workingDirectory.getPath() + "\\src" + "\\" + fileName + ".txt");
+        try
+        {
+
+            OutputStream out =
+                    new BufferedOutputStream(Files.newOutputStream(file, CREATE));
+            BufferedWriter writer =
+                    new BufferedWriter(new OutputStreamWriter(out));
+
+
+            for(String rec : recs)
+            {
+                writer.write(rec, 0, rec.length());
+                writer.newLine();
+            }
+            writer.close();
+            System.out.println("Data file written!");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         needToBeSaved = false;
     }
     public static void openFile() {
