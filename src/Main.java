@@ -1,4 +1,4 @@
-import javax.swing.*;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
@@ -6,11 +6,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.nio.file.StandardOpenOption.CREATE;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import javax.swing.*;
+
 public class Main {
     static ArrayList<String> arrList = new ArrayList<>();
     static Scanner pipe = new Scanner(System.in);
     static String currentChoice = " ";
     static boolean needToBeSaved = false;
+    static String fileName = " ";
     public static void main(String[] args) {
 
         do {
@@ -20,7 +26,8 @@ public class Main {
 
                 do {
                     display();
-                    currentChoice = SafeInput.getRegExString(pipe, "What would you like to do? A (add item), D (delete item), I (insert an item), V (view your list), M (move an item), O (open a list file from disk), S (save the current file to disk), C (clear all the items from the current list), Q (quit the program) ", "[AaDdIiVvMmOoSsCcQq]");
+                    currentChoice = SafeInput.getRegExString(pipe, "What would you like to do? A (add item), D (delete item), I (insert an item), V (view your list), M (move an item), O (open a file from disk), S (save the current file to disk), C (clear all the items from the current list), Q (quit the program) ", "[AaDdIiVvMmOoSsCcQq]");
+
                     switch (currentChoice.toUpperCase()) {
                         case "A":
                             addItem();
@@ -66,6 +73,8 @@ public class Main {
             }
 
         }while (needToBeSaved);
+
+
     }
 
     public static void display() {
@@ -132,54 +141,102 @@ public class Main {
         }
         needToBeSaved = false;
     }
-    public static void openFile() {
-        do {
-            if (needToBeSaved) {
-                if (SafeInput.getYNConfirm(pipe, "You have unsaved work, would you like to save before you quit (y/n)")) {
-                    saveFile();
-                } else {
-                    needToBeSaved = false;
-                }
-            }
-        }while (needToBeSaved);
 
+        public static void openFile () {
+            do {
+                if (needToBeSaved) {
+                    if (SafeInput.getYNConfirm(pipe, "You have unsaved work, would you like to save before you quit (y/n)")) {
+                        saveFile();
+                    } else {
+                        needToBeSaved = false;
+                    }
+                }
+            } while (needToBeSaved);
             JFileChooser chooser = new JFileChooser();
             Scanner inFile;
-            String line = "";
             Path target = new File(System.getProperty("user.dir")).toPath();
             target = target.resolve("src");
             chooser.setCurrentDirectory(target.toFile());
 
-
             try {
 
-                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+                {
                     target = chooser.getSelectedFile().toPath();
+
                     inFile = new Scanner(target);
 
-                    while (inFile.hasNextLine()) {
-                        line = inFile.nextLine();
-                        System.out.println(line);
+                    while(inFile.hasNextLine())
+                    {
+                        arrList.add(inFile.nextLine());
                     }
+
                     System.out.println("File " + target.getFileName() + " successfully read!");
+
                     inFile.close();
 
-                } else {
+                } else
+                {
                     System.out.println("You did not select a file, process terminating");
                     System.exit(0);
                 }
-            } catch (FileNotFoundException e) {
+            }
+            catch (FileNotFoundException e)
+            {
                 System.out.println("File Not Found Error");
                 e.printStackTrace();
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 System.out.println("IOException Error");
                 e.printStackTrace();
             }
 
-    }
+        }
+
+
     public static void clearList() {
         arrList.clear();
     }
+    //JFileChooser chooser = new JFileChooser();
+    //        Scanner inFile;
+    //        Path target = new File(System.getProperty("user.dir")).toPath();
+    //        target = target.resolve("src");
+    //        chooser.setCurrentDirectory(target.toFile());
+    //
+    //        try {
+    //
+    //
+    //            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+    //            {
+    //                target = chooser.getSelectedFile().toPath();
+    //                inFile = new Scanner(target);
+    //
+    //                while(inFile.hasNextLine())
+    //                {
+    //
+    //
+    //                }
+    //
+    //                System.out.println("File " + target.getFileName() + " successfully read!");
+    //                inFile.close();
+    //
+    //            } else
+    //            {
+    //                System.out.println("You did not select a file, process terminating");
+    //                System.exit(0);
+    //            }
+    //        }
+    //        catch (FileNotFoundException e)
+    //        {
+    //            System.out.println("File Not Found Error");
+    //            e.printStackTrace();
+    //        }
+    //        catch (IOException e)
+    //        {
+    //            System.out.println("IOException Error");
+    //            e.printStackTrace();
+    //        }
 
 
 }
