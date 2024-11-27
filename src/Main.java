@@ -63,16 +63,16 @@ public class Main {
 
             } while (!SafeInput.getYNConfirm(pipe, "Are you sure you want to quit?"));
 
-            if (SafeInput.getYNConfirm(pipe, "You have unsaved work, would you like to save before you quit (y/n)"))
-            {
-               saveFile();
-            }
-            else
-            {
-                needToBeSaved = false;
+            if (needToBeSaved == true) {
+                if (SafeInput.getYNConfirm(pipe, "You have unsaved work, would you like to save before you quit (y/n)")) {
+                    saveFile();
+                } else {
+                    needToBeSaved = false;
+                }
             }
 
         }while (needToBeSaved);
+
 
 
     }
