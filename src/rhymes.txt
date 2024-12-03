@@ -1,2 +1,2 @@
-1. bingo
-2. dingo
+bingo
+dingo

@@ -17,7 +17,15 @@ public class Main {
     static String currentChoice = " ";
     static boolean needToBeSaved = false;
     static String fileName = " ";
+
     public static void main(String[] args) {
+
+        JFileChooser chooser = new JFileChooser();
+        Scanner inFile;
+        String line = "";
+        Path target = new File(System.getProperty("user.dir")).toPath();
+        target = target.resolve("src");
+        chooser.setCurrentDirectory(target.toFile());
 
         do {
 
@@ -47,6 +55,43 @@ public class Main {
                             break;
                         case "O":
                             openFile();
+                            try {
+
+                                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+                                {
+                                    target = chooser.getSelectedFile().toPath();
+
+                                    inFile = new Scanner(target);
+                                    arrList.clear();
+                                    while(inFile.hasNextLine())
+                                    {
+
+                                        line = inFile.nextLine();
+                                        if (!arrList.contains(line)) {
+                                            arrList.add(line);
+                                        }
+
+                                    }
+
+                                    System.out.println("File " + target.getFileName() + " successfully read!");
+                                    inFile.close();
+
+                                } else
+                                {
+                                    System.out.println("You did not select a file, process terminating");
+                                    System.exit(0);
+                                }
+                            }
+                            catch (FileNotFoundException e)
+                            {
+                                System.out.println("File Not Found Error");
+                                e.printStackTrace();
+                            }
+                            catch (IOException e)
+                            {
+                                System.out.println("IOException Error");
+                                e.printStackTrace();
+                            }
                             break;
                         case "S":
                             saveFile();
@@ -111,7 +156,7 @@ public class Main {
         ArrayList<String> recs = new ArrayList<>();
         String fileName = "";
         for (int i = 0; i < arrList.size(); i++) {
-            recs.add((i + 1) + ". " + arrList.get(i));
+            recs.add(arrList.get(i));
         }
 
         fileName = SafeInput.getNonZeroLenString(pipe, "What would you like to name your file");
@@ -129,7 +174,7 @@ public class Main {
 
             for(String rec : recs)
             {
-                writer.write(rec, 0, rec.length());
+                writer.append(rec, 0, rec.length());
                 writer.newLine();
             }
             writer.close();
@@ -143,53 +188,17 @@ public class Main {
     }
 
         public static void openFile () {
+
             do {
                 if (needToBeSaved) {
-                    if (SafeInput.getYNConfirm(pipe, "You have unsaved work, would you like to save before you quit (y/n)")) {
+                    if (SafeInput.getYNConfirm(pipe, "You have unsaved work, would you like to save before you open a new file (y/n)")) {
                         saveFile();
                     } else {
                         needToBeSaved = false;
                     }
                 }
             } while (needToBeSaved);
-            JFileChooser chooser = new JFileChooser();
-            Scanner inFile;
-            Path target = new File(System.getProperty("user.dir")).toPath();
-            target = target.resolve("src");
-            chooser.setCurrentDirectory(target.toFile());
 
-            try {
-
-                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-                {
-                    target = chooser.getSelectedFile().toPath();
-                    inFile = new Scanner(target);
-
-                    while(inFile.hasNextLine())
-                    {
-                        arrList.add(inFile.nextLine());
-                    }
-
-                    System.out.println("File " + target.getFileName() + " successfully read!");
-
-                    inFile.close();
-
-                } else
-                {
-                    System.out.println("You did not select a file, process terminating");
-                    System.exit(0);
-                }
-            }
-            catch (FileNotFoundException e)
-            {
-                System.out.println("File Not Found Error");
-                e.printStackTrace();
-            }
-            catch (IOException e)
-            {
-                System.out.println("IOException Error");
-                e.printStackTrace();
-            }
 
         }
 

@@ -1,3 +1,6 @@
-1. henry
-2. dominic
-3. bernard
+henry
+dominic
+bernard
+william
+herbert
+robin
